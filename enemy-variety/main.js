@@ -10,7 +10,7 @@ class Game {
     this.width = width;
     this.height = height;
     this.enemies = [];
-    this.enemyInterval = 100;
+    this.enemyInterval = 500;
     this.enemyTimer = 0;
     this.enemyTypes = ["worm", "ghost", "spider"];
   }
