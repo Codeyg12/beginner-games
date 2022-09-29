@@ -304,13 +304,17 @@ window.addEventListener("load", function () {
       context.textAlign = "center";
       context.fillStyle = "black";
       context.fillText(
-        "GAME OVER! To play again press enter or swipedown",
+        "GAME OVER! You scored " +
+          score +
+          "! To play again press enter or swipedown",
         canvas.width / 2,
         200
       );
       context.fillStyle = "white";
       context.fillText(
-        "GAME OVER! To play again press enter or swipedown",
+        "GAME OVER! You scored " +
+          score +
+          "! To play again press enter or swipedown",
         canvas.width / 2 + 2,
         198
       );

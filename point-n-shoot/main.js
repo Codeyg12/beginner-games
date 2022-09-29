@@ -162,17 +162,30 @@ function drawGameOver() {
   ctx.textAlign = "center";
   ctx.fillStyle = "black";
   ctx.fillText(
-    "GAME OVER, your score is " + score,
+    "GAME OVER, your score is " + score + '! To restart press Enter',
     canvas.width / 2,
     canvas.height / 2
   );
   ctx.fillStyle = "white";
   ctx.fillText(
-    "GAME OVER, your score is " + score,
+    "GAME OVER, your score is " + score + '! To restart press Enter',
     canvas.width / 2 + 5,
     canvas.height / 2 + 5
   );
 }
+
+function restartGame() {
+  ravens = [];
+  score = 0;
+  gameOver = false;
+  animate(0);
+}
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && gameOver) {
+    restartGame();
+  }
+})
 
 // Checks the click to see if user has hit a bird
 window.addEventListener("click", function (e) {
