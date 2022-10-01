@@ -133,10 +133,7 @@ window.addEventListener("load", function () {
         this.frameTimer += deltaTime;
       }
       // Movement based on the keys pressed
-      if (
-        input.keys.indexOf("ArrowRight") > -1 ||
-        input.keys.indexOf("swipe right") > -1
-      ) {
+      if (input.keys.indexOf("ArrowRight") > -1) {
         this.speed = 5;
       } else if (input.keys.indexOf("ArrowLeft") > -1) {
         this.speed = -5;
