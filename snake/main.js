@@ -2,6 +2,16 @@ const ctx = canvas.getContext("2d");
 canvas.width = 700;
 canvas.height = 700;
 let gameOver = false;
+let colors = [
+  'white',
+  'blue',
+  'red',
+  'purple',
+  'green',
+  'gray',
+  'violet'
+]
+let color = colors[Math.floor(Math.random() * colors.length)]
 
 class InputHandler {
   constructor() {
@@ -43,7 +53,7 @@ class Player {
     this.y = 1;
     this.width = 20;
     this.height = 20;
-    this.speedX = 0;
+    this.speedX = 3;
     this.speedY = 0;
   }
 
@@ -94,26 +104,27 @@ class Player {
     context.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  reset() {
+  reset() {   
     this.x = 1;
     this.y = 1;
   }
 }
 
 class Food {
-  constructor(gameWidth, gameHeight) {
+  constructor(gameWidth, gameHeight, color) {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
-    this.width = 20;
-    this.height = 20;
+    this.width = 15;
+    this.height = 15;
     this.x = Math.floor(Math.random() * this.gameWidth - this.width);
     this.y = Math.floor(Math.random() * this.gameHeight - this.height);
+    this.color = color
   }
 
   update() {}
 
   draw(context) {
-    context.fillStyle = "red";
+    context.fillStyle = this.color;
     context.fillRect(this.x, this.y, this.width, this.height);
   }
 
@@ -122,6 +133,13 @@ class Food {
     this.y = Math.floor(Math.random() * this.gameHeight - this.height);
   }
 
+}
+
+function restartGame() {
+  player.reset();
+  food.reset();
+  gameOver = false;
+  animate();
 }
 
 function gameStatus(context) {
@@ -133,16 +151,9 @@ function gameStatus(context) {
   }
 }
 
-function restartGame() {
-  player.reset();
-  food.reset();
-  gameOver = false;
-  animate(0);
-}
-
 const input = new InputHandler();
 const player = new Player(canvas.width, canvas.height);
-const food = new Food(canvas.width, canvas.height);
+const food = new Food(canvas.width, canvas.height, color);
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -154,4 +165,4 @@ function animate() {
     requestAnimationFrame(animate);
   }
 }
-animate(0);
+animate();
