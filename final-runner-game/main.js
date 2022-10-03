@@ -22,17 +22,25 @@ class Game {
         this.UI = new UI(this);
         this.enemies = [];
         this.particles = [];
+        this.collisions = [];
         this.enemyTimer = 0;
         this.enemyInterval = 1000;
         this.debug = true;
         this.maxParticles = 100;
         this.score = 0;
         this.fontColor = 'black'
+        this.time = 0;
+        this.maxTime = 20000;
+        this.gameOver = false;
         this.player.currentState = this.player.states[0];
         this.player.currentState.enter();
     }
 
     update(deltaTime) {
+        this.time += deltaTime;
+        if (this.time > this.maxTime) {
+            this.gameOver = true;
+        }
         this.background.update();
         this.player.update(this.input.keys, deltaTime);
 
@@ -61,19 +69,34 @@ class Game {
         })
 
         if (this.particles.length > this.maxParticles) {
-            this.particles = this.particles.slice(0, this.maxParticles)
+            this.particles = this.maxParticles
         }
+
+        // Handle collosions
+        this.collisions.forEach((collision, index) => {
+            collision.update(deltaTime);
+            if (collision.markedForDeletion) {
+                this.collisions.splice(index, 1)
+            }
+        })
     }
 
     draw(context) {
         this.background.draw(context);
         this.player.draw(context);
+        
         this.enemies.forEach(enemy => {
             enemy.draw(context);
         });
+
         this.particles.forEach(particle => {
             particle.draw(context);
         });
+
+        this.collisions.forEach(collision => {
+            collision.draw(context);
+        });
+
         this.UI.draw(context);
     }
 
@@ -96,7 +119,9 @@ function animate(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     game.update(deltaTime);
     game.draw(ctx);
-    requestAnimationFrame(animate);
+    if (!game.gameOver) {
+        requestAnimationFrame(animate);
+    }
 }
 
 animate(0)
