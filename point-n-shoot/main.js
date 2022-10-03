@@ -30,7 +30,7 @@ class Raven {
     this.directionY = Math.random() * 5 - 2.5;
     this.markedForDeletion = false;
     this.image = new Image();
-    this.image.src = "raven.png";
+    this.image.src = "assets/raven.png";
     this.frame = 0;
     this.maxFrame = 4;
     this.timeSinceFlap = 0;
@@ -103,7 +103,7 @@ let explosions = [];
 class Explosion {
   constructor(x, y, size) {
     this.image = new Image();
-    this.image.src = "boom.png";
+    this.image.src = "assets/boom.png";
     this.spriteWidth = 200;
     this.spriteHeight = 179;
     this.size = size;
@@ -111,7 +111,7 @@ class Explosion {
     this.y = y;
     this.frame = 0;
     this.sound = new Audio();
-    this.sound.src = "ice.wav";
+    this.sound.src = "assets/ice.wav";
     this.timeSinceLastFrame = 0;
     this.frameInterval = 200;
     this.markedForDeletion = false;

@@ -6,15 +6,15 @@ let gameSpeed = 5;
 
 // All layers of the background
 const backgroundLayer1 = new Image();
-backgroundLayer1.src = "layer-1.png";
+backgroundLayer1.src = "assets/layer-1.png";
 const backgroundLayer2 = new Image();
-backgroundLayer2.src = "layer-2.png";
+backgroundLayer2.src = "assets/layer-2.png";
 const backgroundLayer3 = new Image();
-backgroundLayer3.src = "layer-3.png";
+backgroundLayer3.src = "assets/layer-3.png";
 const backgroundLayer4 = new Image();
-backgroundLayer4.src = "layer-4.png";
+backgroundLayer4.src = "assets/layer-4.png";
 const backgroundLayer5 = new Image();
-backgroundLayer5.src = "layer-5.png";
+backgroundLayer5.src = "assets/layer-5.png";
 
 // Starts the animation when the page has loaded
 window.addEventListener("load", function () {

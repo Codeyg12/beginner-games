@@ -16,12 +16,12 @@ class Explosion {
     this.x = x;
     this.y = y;
     this.image = new Image();
-    this.image.src = "boom.png";
+    this.image.src = "assets/boom.png";
     this.frame = 0;
     this.timer = 0;
     this.angle = Math.random() * 6.2;
     this.sound = new Audio();
-    this.sound.src = "ice.wav";
+    this.sound.src = "assets/ice.wav";
   }
 
   update() {
