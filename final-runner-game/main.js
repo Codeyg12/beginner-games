@@ -29,16 +29,16 @@ class Game {
         this.maxParticles = 100;
         this.score = 0;
         this.fontColor = 'black'
-        this.time = 0;
-        this.maxTime = 20000;
+        this.time = 2000;
+        this.maxTime = 0;
         this.gameOver = false;
         this.player.currentState = this.player.states[0];
         this.player.currentState.enter();
     }
 
     update(deltaTime) {
-        this.time += deltaTime;
-        if (this.time > this.maxTime) {
+        this.time -= deltaTime;
+        if (this.time < this.maxTime) {
             this.gameOver = true;
         }
         this.background.update();
