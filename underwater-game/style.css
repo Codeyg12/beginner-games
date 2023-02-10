@@ -11,4 +11,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: hsl(231, 77%, 53%);
+    max-width: 100%;
+    max-height: 100%;
 }
