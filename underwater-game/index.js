@@ -60,16 +60,26 @@ window.addEventListener('load', () => {
             this.markedForDeletion = false;
             this.angle = 0;
             this.va = Math.random() * .2 - .1;
+            this.bounced = false;
+            this.bottomBounce = Math.random() * 100 + 60;
         }
         update() {
             this.angle += this.va;
             this.speedY += this.gravity;
-            this.x -= this.speedX;
+            this.x -= this.speedX + this.game.speed;
             this.y += this.speedY;
             if (this.y > this.game.height + this.size || this.x < 0 - this.size) this.markedForDeletion = true;
+            if (this.y > this.game.height - this.bottomBounce && !this.bounced) {
+                this.bounced = true;
+                this.speedY *= -.5
+            }
         }
         draw(context) {
-            context.drawImage(this.image, this.frameX * this.spriteSize, this.frameY * this.spriteSize, this.spriteSize, this.spriteSize, this.x, this.y, this.size, this.size)
+            context.save()
+            context.translate(this.x, this.y)
+            context.rotate(this.angle)
+            context.drawImage(this.image, this.frameX * this.spriteSize, this.frameY * this.spriteSize, this.spriteSize, this.spriteSize, 0, 0, this.size, this.size)
+            context.restore()
         }
     }
     class Player {
@@ -146,7 +156,7 @@ window.addEventListener('load', () => {
         enterPowerUp() {
             this.powerUpTimer = 0;
             this.powerUp = true;
-            this.game.ammo = this.game.maxAmmo;
+            if (this.game.ammo < this.game.maxAmmo) this.game.ammo = this.game.maxAmmo;
         }
     }
     class Enemy {
@@ -341,16 +351,19 @@ window.addEventListener('load', () => {
                     for (let i = 0; i < 10; i++) {
                         this.particles.push(new Particle(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
                     }
-                    if (enemy.type = 'lucky') this.player.enterPowerUp();
+                    if (enemy.type === 'lucky') this.player.enterPowerUp();
                     else this.score--;
                 }
                 this.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, enemy)) {
                         enemy.lives--;
                         projectile.markedForDeletion = true;
+                        this.particles.push(new Particle(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
                         if (enemy.lives <= 0) {
                             enemy.markedForDeletion = true;
+                            for (let i = 0; i < 10; i++) {
                                 this.particles.push(new Particle(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
+                            }
                             if (!this.gameOver) this.score += enemy.score;
                             if (this.score > this.winningScore) this.gameOver = true
                         }
