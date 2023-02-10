@@ -1,7 +1,7 @@
 window.addEventListener('load', () => {
     const canvas = document.getElementById("canvas")
     const ctx = canvas.getContext('2d')
-    canvas.width = 800
+    canvas.width = 1000
     canvas.height = 500
 
     class InputHandler {
@@ -395,9 +395,9 @@ window.addEventListener('load', () => {
             this.ammoInterval = 500;
             this.gameOver = false;
             this.score = 0;
-            this.winningScore = 10;
+            this.winningScore = 100;
             this.gameTime = 0;
-            this.timeLimit = 10000;
+            this.timeLimit = 3000;
             this.speed = 1;
             this.debug = false;
         }
@@ -426,7 +426,7 @@ window.addEventListener('load', () => {
                         this.particles.push(new Particle(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
                     }
                     if (enemy.type === 'lucky') this.player.enterPowerUp();
-                    else this.score--;
+                    else if (!this.gameOver) this.score--;
                 }
                 this.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, enemy)) {
@@ -445,7 +445,7 @@ window.addEventListener('load', () => {
                                 }
                             }
                             if (!this.gameOver) this.score += enemy.score;
-                            if (this.score > this.winningScore) this.gameOver = true
+                            // if (this.score > this.winningScore) this.gameOver = true
                         }
                     }
                 })
@@ -460,7 +460,6 @@ window.addEventListener('load', () => {
         }
         draw(context) {
             this.background.draw(context);
-            this.ui.draw(context);
             this.player.draw(context);
             this.particles.forEach(particle => particle.draw(context))
             this.enemies.forEach(enemy => {
@@ -468,6 +467,7 @@ window.addEventListener('load', () => {
             })
             this.explosions.forEach(explosion => explosion.draw(context))
             this.background.layer4.draw(context)
+            this.ui.draw(context);
         }
         addEnemy() {
             const randomize = Math.random();
