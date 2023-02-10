@@ -75,6 +75,9 @@ window.addEventListener('load', () => {
                 this.speedY = 0;
             }
             this.y += this.speedY
+            //vertical
+            if (this.y > this.game.height - this.height * .5) this.y = this.game.height - this.height * .5
+            else if (this.y < -this.height * .5) this.y = -this.height * .5
             this.projectiles.forEach(projectile => {
                 projectile.update()
             })
@@ -145,7 +148,7 @@ window.addEventListener('load', () => {
             if (this.game.debug) context.strokeRect(this.x, this.y, this.width, this.height)
             context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
             context.font = '25px Helvetica'
-            context.fillText(this.lives, this.x, this.y)
+            if (this.game.debug) context.fillText(this.lives, this.x, this.y - 5)
         }
     }
     class Angler1 extends Enemy {
