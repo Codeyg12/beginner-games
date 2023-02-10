@@ -103,8 +103,6 @@ window.addEventListener('load', () => {
             this.x = this.game.width;
             this.speedX = Math.random() * -1.5 - .5;
             this.markedForDeletion = false;
-            this.lives = 5;
-            this.score = this.lives;
             this.frameX = 0;
             this.frameY = 0;
             this.maxFrame = 37;
@@ -133,6 +131,33 @@ window.addEventListener('load', () => {
             this.y = Math.random() * (this.game.height * 0.9 - this.height);
             this.image = document.getElementById('angler1')
             this.frameY = Math.floor(Math.random() * 3)
+            this.lives = 2;
+            this.score = this.lives;
+        }
+    }
+    class Angler2 extends Enemy {
+        constructor(game) {
+            super(game);
+            this.width = 213;
+            this.height = 165;
+            this.y = Math.random() * (this.game.height * 0.9 - this.height);
+            this.image = document.getElementById('angler2')
+            this.frameY = Math.floor(Math.random() * 2)
+            this.lives = 3;
+            this.score = this.lives;
+        }
+    }
+    class LuckyFish extends Enemy {
+        constructor(game) {
+            super(game);
+            this.width = 99;
+            this.height = 95;
+            this.y = Math.random() * (this.game.height * .9 - this.height);
+            this.image = document.getElementById('lucky');
+            this.frameY = Math.floor(Math.random() * 2);
+            this.lives = 3;
+            this.score = 15;
+            this.type = 'lucky'
         }
     }
     class Layer {
@@ -288,7 +313,11 @@ window.addEventListener('load', () => {
             this.background.layer4.draw(context)
         }
         addEnemy() {
-            this.enemies.push(new Angler1(this));
+            const randomize = Math.random();
+            if (randomize < .3) this.enemies.push(new Angler1(this));
+            else if (randomize < .6) this.enemies.push(new LuckyFish(this))
+            else this.enemies.push(new Angler2(this))
+            
         }
         checkCollision(rect1, rect2) {
             return (
