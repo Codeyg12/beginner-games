@@ -37,7 +37,7 @@ window.addEventListener('load', () => {
         }
         update() {
             this.x += this.speed;
-            if (this.x > this.game.width * .85) this.markedForDeletion = true;
+            if (this.x > this.game.width * .90) this.markedForDeletion = true;
         }
         draw(context) {
             context.drawImage(this.image, this.x, this.y)
@@ -290,6 +290,47 @@ window.addEventListener('load', () => {
             this.layers.forEach(layer => layer.draw(context))
         }
     }
+    class Explosion {
+        constructor (game, x, y) {
+            this.game = game;
+            this.frameX = 0;
+            this.spriteHeight = 200;
+            this.spriteWidth = 200;
+            this.height = this.spriteHeight
+            this.width = this.spriteWidth;
+            this.x = x - this.width * .5;
+            this.y = y - this.height * .5;
+            this.fps = 15;
+            this.timer = 0;
+            this.interval = 1000/this.fps;
+            this.markedForDeletion = false;
+            this.maxFrame = 8;
+        }
+        update(deltaTime) {
+            if (this.timer > this.interval) {
+                this.frameX++
+            } else {
+                this.timer += deltaTime
+            }
+            if (this.frameX > this.maxFrame) this.markedForDeletion = true
+        } 
+        draw(context) {
+            context.drawImage(this.image, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
+        }
+    }
+    class SmokeExplosion extends Explosion {
+        constructor(game, x, y) {
+            super(game, x, y)
+            this.image = document.getElementById('smoke')
+        }
+    }
+    class FireExplosion extends Explosion {
+        constructor(game, x, y) {
+            super(game, x, y)
+            this.image = document.getElementById('fire')
+        }
+
+    }
     class UI {
         constructor(game) {
             this.game = game;
@@ -345,6 +386,7 @@ window.addEventListener('load', () => {
             this.keys = [];
             this.enemies = [];
             this.particles = [];
+            this.explosions = [];
             this.enemyTimer = 0;
             this.enemyInterval = 1000;
             this.ammo = 20;
@@ -373,10 +415,13 @@ window.addEventListener('load', () => {
             }
             this.particles.forEach(particle => particle.update());
             this.particles = this.particles.filter(particle => !particle.markedForDeletion)
+            this.explosions.forEach(explosion => explosion.update(deltaTime));
+            this.explosions = this.explosions.filter(explosion => !explosion.markedForDeletion)
             this.enemies.forEach(enemy => {
                 enemy.update();
                 if (this.checkCollision(this.player, enemy)) {
                     enemy.markedForDeletion = true;
+                    this.addExplosion(enemy)
                     for (let i = 0; i < 10; i++) {
                         this.particles.push(new Particle(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
                     }
@@ -393,6 +438,7 @@ window.addEventListener('load', () => {
                                 this.particles.push(new Particle(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
                             }
                             enemy.markedForDeletion = true;
+                            this.addExplosion(enemy)
                             if (enemy.type === 'hive') {
                                 for (let i = 0; i < 5; i++) {
                                     this.enemies.push(new Drone(this, enemy.x + Math.random() * enemy.width, enemy.y + Math.random() * enemy.height * .5))
@@ -420,6 +466,7 @@ window.addEventListener('load', () => {
             this.enemies.forEach(enemy => {
                 enemy.draw(context);
             })
+            this.explosions.forEach(explosion => explosion.draw(context))
             this.background.layer4.draw(context)
         }
         addEnemy() {
@@ -429,6 +476,11 @@ window.addEventListener('load', () => {
             else if (randomize < .8) this.enemies.push(new HiveWhale(this))
             else this.enemies.push(new Angler2(this))
             
+        }
+        addExplosion(enemy) {
+            const randomize = Math.random();
+            if (randomize < .5) this.explosions.push(new SmokeExplosion(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
+            else this.explosions.push(new FireExplosion(this, enemy.x + enemy.width * .5, enemy.y + enemy.height * .5))
         }
         checkCollision(rect1, rect2) {
             return (
@@ -444,8 +496,8 @@ window.addEventListener('load', () => {
         const deltaTime = timeStamp - lastTime
         lastTime = timeStamp;
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        game.update(deltaTime);
         game.draw(ctx);
+        game.update(deltaTime);
         requestAnimationFrame(animate);
     }
     animate(0);
