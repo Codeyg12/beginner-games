@@ -53,9 +53,13 @@ window.addEventListener('load', () => {
             this.height = 190;
             this.x = 20;
             this.y = 100;
+            this.frameX = 0;
+            this.frameY = 0;
+            this.maxFrame = 37;
             this.speedY = 0;
             this.maxSpeed = 2;
             this.projectiles = [];
+            this.image = document.getElementById('player')
         }
         update() {
             if (this.game.keys.includes('ArrowUp')) {
@@ -70,10 +74,16 @@ window.addEventListener('load', () => {
                 projectile.update()
             })
             this.projectiles = this.projectiles.filter(projectile => !projectile.markedForDeletion)
+            if (this.frameX < this.maxFrame) {
+                this.frameX++;
+            } else {
+                this.frameX = 0;
+            }
         }
         draw(context) {
             context.fillStyle = 'white'
             context.fillRect(this.x, this.y, this.width, this.height);
+            context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
             this.projectiles.forEach(projectile => {
                 projectile.draw(context)
             })
