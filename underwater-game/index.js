@@ -5,13 +5,20 @@ window.addEventListener('load', () => {
     canvas.height = 500
 
     class InputHandler {
+        constructor() {
+
+        }
 
     }
     class Projectile {
-
+        constructor() {
+            
+        }
     }
     class Particle {
-
+        constructor() {
+            
+        }
     }
     class Player {
         constructor(game) {
@@ -30,16 +37,24 @@ window.addEventListener('load', () => {
         }
     }
     class Enemy {
-
+        constructor() {
+            
+        }
     }
     class Layer {
-
+        constructor() {
+            
+        }
     }
     class Background {
-
+        constructor() {
+            
+        }
     }
     class UI {
-
+        constructor() {
+            
+        }
     }
     class Game {
         constructor(width, height) {
@@ -56,4 +71,13 @@ window.addEventListener('load', () => {
     }
 
     const game = new Game(canvas.width, canvas.height);
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        game.update();
+        game.draw(ctx);
+        requestAnimationFrame(animate);
+    }
+    animate();
+
 });
